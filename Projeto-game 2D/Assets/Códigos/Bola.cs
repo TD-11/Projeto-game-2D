@@ -22,6 +22,12 @@ public class Bola : MonoBehaviour
         {
             Destroy(collision.gameObject);
         }
+        if (collision.gameObject.CompareTag("Perigo"))
+        {
+            
+            GameManager.instance.GameOver();
+            Destroy(gameObject);
+        }
 
         direcao = Vector2.Reflect(direcao, collision.contacts[0].normal);
     }
