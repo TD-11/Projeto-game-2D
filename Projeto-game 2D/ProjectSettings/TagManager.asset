@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Bloquinho
   - Perigo
+  - Bloco forte
   layers:
   - Default
   - TransparentFX

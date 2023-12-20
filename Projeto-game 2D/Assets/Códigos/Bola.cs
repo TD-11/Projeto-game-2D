@@ -13,7 +13,8 @@ public class Bola : MonoBehaviour
     void Start()
     {
         TryGetComponent(out rb);
-        direcao = Random.insideUnitCircle;
+        direcao = Random.insideUnitCircle.normalized;
+        direcao = new Vector2(direcao.x, 1).normalized;
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
@@ -22,14 +23,29 @@ public class Bola : MonoBehaviour
         {
             Destroy(collision.gameObject);
         }
+        if(collision.gameObject.CompareTag("Bloco forte")) 
+        {
+            collision.gameObject.GetComponent<BlocoForte>().TomouDano();
+        }
         if (collision.gameObject.CompareTag("Perigo"))
         {
             
             GameManager.instance.GameOver();
             Destroy(gameObject);
         }
-
-        direcao = Vector2.Reflect(direcao, collision.contacts[0].normal);
+        if (collision.contacts.Length == 1)
+        {
+            direcao = Vector2.Reflect(direcao, collision.contacts[0].normal);
+        }
+        else
+        {
+            Vector2 normalMedia = Vector2.zero;
+            foreach(var ponto in collision.contacts)
+            {
+                normalMedia = (normalMedia + ponto.normal) / 2;
+            }
+            direcao = Vector2.Reflect(direcao, normalMedia);
+        }
     }
     // Update is called once per frame
     void Update()
